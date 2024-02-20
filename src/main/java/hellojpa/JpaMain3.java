@@ -15,10 +15,18 @@ public class JpaMain3 {
         tx.begin();
 
         try {
-            Member member = new Member(200L, "member200");
-            em.persist(member);
+//            Member member = new Member(200L, "member200");
+//            em.persist(member);
+//
+//            em.flush();
 
-            em.flush();
+            Member findMember = em.find(Member.class, 150L);
+            findMember.setName("AAAAA");
+
+//            em.detach(findMember);
+            em.clear();
+
+            Member findMember2 = em.find(Member.class, 150L);
 
             System.out.println("====================");
             tx.commit();
