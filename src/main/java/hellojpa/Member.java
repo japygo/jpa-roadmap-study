@@ -1,6 +1,9 @@
 package hellojpa;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -80,6 +83,27 @@ public class Member extends BaseEntity {
     @Lob
     private String description;
 
+    // 기간 Period
+//    private LocalDateTime startDate;
+//    private LocalDateTime endDate;
+    @Embedded
+    private Period workPeriod;
+
+    // 주소 Address
+//    private String city;
+//    private String street;
+//    private String zipcode;
+    @Embedded
+    private Address homeAddress;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
+    })
+    private Address workAddress;
+
     public Member() {
     }
 
@@ -158,5 +182,21 @@ public class Member extends BaseEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Period getWorkPeriod() {
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }
