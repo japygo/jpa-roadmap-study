@@ -24,11 +24,35 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            TypedQuery<Member> query1 = em.createQuery("select m from Member m where m.username = :username", Member.class);
-            TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
-            Query query3 = em.createQuery("SELECT m.username, m.age from Member m");
+            em.flush();
+            em.clear();
 
-            query1.setParameter("username", "member1");
+//            TypedQuery<Member> query1 = em.createQuery("select m from Member m where m.username = :username", Member.class);
+//            TypedQuery<String> query2 = em.createQuery("select m.username from Member m", String.class);
+//            Query query3 = em.createQuery("SELECT m.username, m.age from Member m");
+//
+//            query1.setParameter("username", "member1");
+
+            // 엔티티 프로젝션
+            List<Member> result = em.createQuery("select m from Member m", Member.class)
+                    .getResultList();
+
+            result.get(0).setAge(20);
+
+            // 엔티티 프로젝션
+            em.createQuery("select m.team from Member m", Team.class).getResultList();
+            em.createQuery("select t from Member m join m.team t", Team.class).getResultList();
+
+            // 임베디드 타입 프로젝션
+            em.createQuery("select o.address from Order o", Address.class).getResultList();
+
+            // 스칼라 타입 프로젝션
+            em.createQuery("select m.username, m.age from Member m").getResultList();
+
+            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+                    .getResultList();
+            MemberDTO memberDTO = resultList.get(0);
+            System.out.println("memberDTO = " + memberDTO.getUsername());
 
             tx.commit();
         } catch (Exception e) {
