@@ -52,8 +52,22 @@ public class JpaMain8 {
 
 //            String query = "select t from Team t";
 //            String query = "select t from Team t join fetch t.members";
-            String query = "select distinct t from Team t join fetch t.members";
-            List<Team> resultList = em.createQuery(query, Team.class).getResultList();
+//            String query = "select distinct t from Team t join fetch t.members";
+//            List<Team> resultList = em.createQuery(query, Team.class).getResultList();
+//            for (Team team : resultList) {
+//                System.out.println("team = " + team.getName() + ", " + team.getMembers().size());
+//                for (Member member : team.getMembers()) {
+//                    System.out.println("-> member = " + member);
+//                }
+//            }
+
+            // WARN: HHH90003004: firstResult/maxResults specified with collection fetch; applying in memory
+//            String query = "select t from Team t join fetch t.members";
+            String query = "select t from Team t";
+            List<Team> resultList = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(10)
+                    .getResultList();
             for (Team team : resultList) {
                 System.out.println("team = " + team.getName() + ", " + team.getMembers().size());
                 for (Member member : team.getMembers()) {
