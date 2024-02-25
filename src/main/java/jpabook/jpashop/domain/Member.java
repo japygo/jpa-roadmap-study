@@ -1,8 +1,8 @@
 package jpabook.jpashop.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -22,7 +22,7 @@ public class Member {
 
     private String name;
 
-    @Enumerated
+    @Embedded
     private Address address;
 
     @OneToMany(mappedBy = "member")
