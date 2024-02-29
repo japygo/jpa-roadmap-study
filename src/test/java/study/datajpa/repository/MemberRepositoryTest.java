@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -141,5 +142,31 @@ class MemberRepositoryTest {
         for (Member member : result) {
             System.out.println("member = " + member);
         }
+    }
+
+    @Test
+    void returnType() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> list = memberRepository.findListByUsername("AAA");
+        System.out.println("list = " + list);
+
+        Member member = memberRepository.findMemberByUsername("AAA");
+        System.out.println("member = " + member);
+
+        Optional<Member> optional = memberRepository.findOptionalByUsername("AAA");
+        System.out.println("optional = " + optional.get());
+
+        List<Member> list2 = memberRepository.findListByUsername("CCC");
+        System.out.println("list2 = " + list2);
+
+        Member member2 = memberRepository.findMemberByUsername("CCC");
+        System.out.println("member2 = " + member2);
+
+        Optional<Member> optional2 = memberRepository.findOptionalByUsername("CCC");
+        System.out.println("optional2 = " + optional2);
     }
 }
