@@ -2,11 +2,14 @@ package study.querydsl.repository;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 import study.querydsl.dto.MemberSearchCondition;
 import study.querydsl.dto.MemberTeamDto;
@@ -19,16 +22,41 @@ import static study.querydsl.entity.QTeam.team;
 
 import java.util.List;
 
-public class MemberRepositoryImpl implements MemberRepositoryCustom {
+public class MemberRepositoryImpl extends QuerydslRepositorySupport implements MemberRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public MemberRepositoryImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
+//    public MemberRepositoryImpl(JPAQueryFactory queryFactory) {
+//        this.queryFactory = queryFactory;
+//    }
+
+    public MemberRepositoryImpl(Class<?> domainClass, EntityManager em) {
+        super(domainClass);
+        this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
     public List<MemberTeamDto> search(MemberSearchCondition condition) {
+
+//        EntityManager entityManager = getEntityManager();
+//
+//        List<MemberTeamDto> result = from(member)
+//                .leftJoin(member.team, team)
+//                .where(
+//                        usernameEq(condition.getUsername()),
+//                        teamNameEq(condition.getTeamName()),
+//                        ageGoe(condition.getAgeGoe()),
+//                        ageLoe(condition.getAgeLoe())
+//                )
+//                .select(new QMemberTeamDto(
+//                        member.id,
+//                        member.username,
+//                        member.age,
+//                        team.id,
+//                        team.name
+//                ))
+//                .fetch();
+
         return queryFactory
                 .select(new QMemberTeamDto(
                         member.id,
@@ -50,6 +78,26 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     @Override
     public Page<MemberTeamDto> searchPageSimple(MemberSearchCondition condition, Pageable pageable) {
+//        JPQLQuery<MemberTeamDto> jpaQuery = from(member)
+//                .leftJoin(member.team, team)
+//                .where(
+//                        usernameEq(condition.getUsername()),
+//                        teamNameEq(condition.getTeamName()),
+//                        ageGoe(condition.getAgeGoe()),
+//                        ageLoe(condition.getAgeLoe())
+//                )
+//                .select(new QMemberTeamDto(
+//                        member.id,
+//                        member.username,
+//                        member.age,
+//                        team.id,
+//                        team.name
+//                ));
+//
+//        JPQLQuery<MemberTeamDto> query = getQuerydsl().applyPagination(pageable, jpaQuery);
+//
+//        List<MemberTeamDto> result = query.fetch();
+
         QueryResults<MemberTeamDto> results = queryFactory
                 .select(new QMemberTeamDto(
                         member.id,
